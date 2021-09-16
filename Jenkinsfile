@@ -11,7 +11,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                	app = docker.build("vinsdocker/testimage1")
+                	app = docker.build("bharathgr/testimage1")
                 }
             }
         }
