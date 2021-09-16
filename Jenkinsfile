@@ -10,18 +10,20 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                //sh
-                bat "docker build -t=bharathgr/firstimage ."
+                script {
+                	app = docker.build("vinsdocker/testimage1")
+                }
             }
         }
         stage('Push Image') {
-            steps {
-			    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    //sh
-			        bat "docker login --username=${user} --password=${pass}"
-			        bat "docker push bharathgr/firstimage:latest"
-			    }
-            }
+             steps {
+                 script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            			        	app.push("${BUILD_NUMBER}")
+            			            app.push("latest")
+                    }
+                 }
+             }
         }
     }
 }
